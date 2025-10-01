@@ -1,0 +1,35 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: 5
+    paths:
+        - src/
+        - killakit.php
+    excludePaths:
+        - vendor/
+        - node_modules/
+        - assets/
+        - build/
+    scanFiles:
+        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+        - vendor/arifpavel/elementor-stubs/elementor-stubs.php
+    bootstrapFiles:
+        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+
+    ignoreErrors:
+        # WordPress dynamic callbacks
+        - '#Parameter \#1 \$callback of function (add_action|add_filter) expects callable\(\): mixed, array\{[a-zA-Z0-9_\\]+, ''?\w+''?\} given\.#'
+        
+        # WordPress dynamic properties
+        - '#Access to an undefined property (WP_Post|WP_User|WP_Term)::\$\w+\.#'
+        
+        # Mixed types from WordPress
+        - '#Cannot call method \w+\(\) on mixed\.#'
+        - '#Access to an undefined property mixed::\$\w+\.#'
+        
+        # Method parameter count (common in WordPress hooks)
+        - '#Method KillaKit\\\w+::\w+\(\) invoked with \d+ parameters, \d+ required\.#'
+
+    reportUnmatchedIgnoredErrors: false
+
