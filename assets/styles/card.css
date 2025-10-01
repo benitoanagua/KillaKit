@@ -1,0 +1,64 @@
+/* Card Component - Flat Design */
+.wc-card {
+  @apply block transition-all duration-300 bg-surface border border-outlineVariant;
+}
+
+.wc-card--flat {
+  @apply shadow-none rounded-none border-b-4 border-b-primary;
+}
+
+.wc-card__container {
+  @apply flex gap-4 w-full;
+}
+
+.wc-card__figure {
+  @apply m-0 overflow-hidden flex-shrink-0;
+}
+
+.wc-card__content {
+  @apply flex flex-col gap-y-3 flex-1 min-w-0 p-4;
+}
+
+.wc-card__author {
+  @apply flex items-center gap-x-2;
+}
+
+.wc-card__author-image {
+  @apply w-8 h-8 rounded-none object-cover;
+}
+
+.wc-card__author-bullet {
+  @apply bg-primary w-2 h-2 rounded-none inline-block;
+}
+
+.wc-card__author-link {
+  @apply text-onSurfaceVariant text-sm font-medium no-underline hover:text-primary transition-colors;
+}
+
+.wc-card__title-link {
+  @apply text-onSurface no-underline block;
+}
+
+.wc-card__excerpt {
+  @apply text-onSurfaceVariant my-2 text-base leading-relaxed;
+}
+
+.wc-card__meta {
+  @apply text-onSurfaceVariant flex flex-wrap items-center gap-x-1 gap-y-4 text-sm;
+}
+
+.wc-card__meta-item {
+  @apply whitespace-nowrap;
+}
+
+.wc-card__meta-item:not(:last-child)::after {
+  @apply content-['•'] ml-2 mr-1;
+}
+
+.wc-card__tag {
+  @apply bg-primaryContainer text-onPrimaryContainer py-1 px-3 rounded-none text-xs no-underline font-medium transition-colors border border-primary;
+}
+
+.wc-card__tag:hover {
+  @apply bg-primary text-onPrimary;
+}

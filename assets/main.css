@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "@iconify/tailwind4";
+
+@import "./styles/material-theme.css";
+@import "./styles/theme.css";
+
+@import "./styles/card.css";
+
+
+@source '../assets/**/*.{ts,css,js}';
+@source '../src/**/*.{ts,css,js,php}';

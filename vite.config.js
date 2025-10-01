@@ -13,7 +13,7 @@ export default defineConfig({
     minify: "esbuild",
     emptyOutDir: true,
     cssCodeSplit: false,
-    outDir: "public",
+    outDir: "build",
     lib: {
       entry: resolve(__dirname, "assets/main.ts"),
       name: "KillaKitElements",
