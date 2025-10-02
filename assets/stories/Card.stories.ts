@@ -20,7 +20,7 @@ const meta = {
   component: "wc-card",
   tags: ["autodocs"],
   argTypes: {
-    style: {
+    designStyle: {
       control: { type: "select" },
       options: ["flat", "elegant", "neumorphism", "playful", "brutalist"],
       description: "Visual style variant",
@@ -47,7 +47,7 @@ type Story = StoryObj<CardProps>;
 
 const baseCardData = (): Omit<
   CardProps,
-  "style" | "media_align" | "aspect_ratio" | "auto_layout"
+  "designStyle" | "media_align" | "aspect_ratio" | "auto_layout"
 > => ({
   title: randCatchPhrase(),
   url: randUrl(),
@@ -75,103 +75,16 @@ const renderCard = (args: CardProps) => html`
     author-profile-image=${args.author_profile_image || ""}
     reading-time=${args.reading_time || ""}
     published-at=${args.published_at || ""}
-    style=${args.style || "flat"}
+    design-style=${args.designStyle || "flat"}
     media-align=${args.media_align || "left"}
     aspect-ratio=${args.aspect_ratio || "monitor"}
     ?auto-layout=${args.auto_layout ?? true}
   ></wc-card>
 `;
 
-export const Flat: Story = {
-  name: "Flat Style",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "flat",
-  },
-};
-
-export const Elegant: Story = {
-  name: "Elegant Style",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "elegant",
-  },
-};
-
-export const Neumorphism: Story = {
-  name: "Neumorphism Style",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "neumorphism",
-  },
-};
-
-export const Playful: Story = {
-  name: "Playful Style",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "playful",
-  },
-};
-
-export const Brutalist: Story = {
-  name: "Brutalist Style",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "brutalist",
-  },
-};
-
-export const TopAligned: Story = {
-  name: "Top Aligned",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "flat",
-    media_align: "top",
-    aspect_ratio: "video",
-  },
-};
-
-export const RightAligned: Story = {
-  name: "Right Aligned",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "elegant",
-    media_align: "right",
-  },
-};
-
-export const NoImage: Story = {
-  name: "Without Image",
-  render: (args) => renderCard(args),
-  args: {
-    ...baseCardData(),
-    style: "flat",
-    feature_image: "",
-  },
-};
-
-export const Minimal: Story = {
-  name: "Minimal Content",
-  render: (args) => renderCard(args),
-  args: {
-    title: randCatchPhrase(),
-    url: randUrl(),
-    feature_image: `https://picsum.photos/600/400?random=${randNumber({ min: 1, max: 1000 })}`,
-    style: "flat",
-    media_align: "top",
-  } as CardProps,
-};
-
-export const StyleShowcase: Story = {
-  name: "All Styles",
+// Variante 1: Todos los estilos de diseño
+export const AllStyles: Story = {
+  name: "All Design Styles",
   render: () => html`
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
@@ -184,7 +97,7 @@ export const StyleShowcase: Story = {
             </h4>
             ${renderCard({
               ...baseCardData(),
-              style: style as any,
+              designStyle: style as any,
               media_align: "top",
             })}
           </div>
@@ -194,24 +107,25 @@ export const StyleShowcase: Story = {
   `,
 };
 
-export const LayoutShowcase: Story = {
-  name: "Layout Options",
+// Variante 2: Diferentes layouts de medios
+export const Layouts: Story = {
+  name: "Media Layouts",
   render: () => html`
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
       ${[
-        { align: "left" as const, label: "Left" },
-        { align: "right" as const, label: "Right" },
-        { align: "top" as const, label: "Top" },
-        { align: "bottom" as const, label: "Bottom" },
+        { align: "left" as const, label: "Left Aligned" },
+        { align: "right" as const, label: "Right Aligned" },
+        { align: "top" as const, label: "Top Aligned" },
+        { align: "bottom" as const, label: "Bottom Aligned" },
       ].map(
         (layout) => html`
           <div>
             <h4 class="text-sm font-medium mb-2 text-onSurfaceVariant">
-              ${layout.label} Aligned
+              ${layout.label}
             </h4>
             ${renderCard({
               ...baseCardData(),
-              style: "flat",
+              designStyle: "flat",
               media_align: layout.align,
             })}
           </div>
@@ -221,6 +135,31 @@ export const LayoutShowcase: Story = {
   `,
 };
 
+// Variante 3: Tarjeta minimalista
+export const Minimal: Story = {
+  name: "Minimal Card",
+  render: (args) => renderCard(args),
+  args: {
+    title: randCatchPhrase(),
+    url: randUrl(),
+    feature_image: `https://picsum.photos/600/400?random=${randNumber({ min: 1, max: 1000 })}`,
+    designStyle: "flat",
+    media_align: "top",
+  } as CardProps,
+};
+
+// Variante 4: Sin imagen
+export const NoImage: Story = {
+  name: "Card Without Image",
+  render: (args) => renderCard(args),
+  args: {
+    ...baseCardData(),
+    designStyle: "elegant",
+    feature_image: "",
+  },
+};
+
+// Variante 5: Playground interactivo
 export const Playground: Story = {
   name: "Playground",
   render: (args) => html`
@@ -229,21 +168,19 @@ export const Playground: Story = {
         ${renderCard(args)}
       </div>
       <div class="text-sm text-onSurfaceVariant space-y-1">
-        <div><strong>Style:</strong> ${args.style}</div>
+        <div><strong>Design Style:</strong> ${args.designStyle}</div>
         <div><strong>Layout:</strong> ${args.media_align}</div>
         <div><strong>Aspect Ratio:</strong> ${args.aspect_ratio}</div>
         <div><strong>Auto Layout:</strong> ${args.auto_layout}</div>
+        <div><strong>Has Image:</strong> ${!!args.feature_image}</div>
       </div>
     </div>
   `,
   args: {
     ...baseCardData(),
-    style: "flat",
+    designStyle: "flat",
     media_align: "left",
     aspect_ratio: "monitor",
     auto_layout: true,
-  },
-  parameters: {
-    controls: { expanded: true },
   },
 };

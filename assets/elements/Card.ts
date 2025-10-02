@@ -6,6 +6,7 @@ import type {
   CardMediaAlign,
   CardMediaWidth,
   CardAspectRatio,
+  CardStyle,
 } from "../types/card.js";
 import { TitleRendererMixin } from "../mixins/TitleRenderer.js";
 import { PaddingMixin } from "../mixins/PaddingMixin.js";
@@ -38,12 +39,8 @@ export class WcCard extends BaseClass {
   @property({ type: String, attribute: "reading-time" }) reading_time = "";
   @property({ type: String, attribute: "published-at" }) published_at = "";
   @property({ type: Boolean, attribute: "auto-layout" }) auto_layout = false;
-  @property({ type: String }) style:
-    | "flat"
-    | "elegant"
-    | "neumorphism"
-    | "playful"
-    | "brutalist" = "flat";
+  @property({ type: String, attribute: "design-style" })
+  designStyle: CardStyle = "flat";
 
   protected createRenderRoot() {
     const shadowRoot = super.createRenderRoot();
@@ -56,8 +53,8 @@ export class WcCard extends BaseClass {
   updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
 
-    if (changedProperties.has("style")) {
-      this.currentStyle = this.style;
+    if (changedProperties.has("designStyle")) {
+      this.currentStyle = this.designStyle;
       this.updateThemeVars();
       this.applyThemeClass();
     }
@@ -67,7 +64,7 @@ export class WcCard extends BaseClass {
     const paddingClass = this.getPaddingClass();
     const baseClasses = [
       "wc-card",
-      `wc-card-style-${this.style}`,
+      `wc-card-style-${this.designStyle}`,
       paddingClass,
     ];
 
@@ -163,7 +160,7 @@ export class WcCard extends BaseClass {
           ? "aspect-video"
           : "aspect-4/3";
 
-    return `${baseClasses} ${styleClasses[this.style]} ${aspectClass}`;
+    return `${baseClasses} ${styleClasses[this.designStyle]} ${aspectClass}`;
   }
 
   private _handleCardClick(e: Event) {
@@ -172,7 +169,7 @@ export class WcCard extends BaseClass {
         detail: {
           title: this.title,
           url: this.url,
-          style: this.style,
+          designStyle: this.designStyle,
           nativeEvent: e,
         },
         bubbles: true,

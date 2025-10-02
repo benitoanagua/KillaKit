@@ -1,4 +1,3 @@
-// Archivo: assets/stories/Button.stories.ts
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit-html";
 
@@ -15,7 +14,7 @@ const meta = {
       control: { type: "select" },
       options: ["sm", "md", "lg", "xl"],
     },
-    style: {
+    designStyle: {
       control: { type: "select" },
       options: ["flat", "elegant", "neumorphism", "playful", "brutalist"],
     },
@@ -27,12 +26,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<any>;
 
-// Story básico - Default
+// Variante 1: Botón por defecto
 export const Default: Story = {
+  name: "Default Button",
   args: {
     variant: "primary",
     size: "md",
-    style: "flat",
+    designStyle: "flat",
     disabled: false,
     loading: false,
   },
@@ -40,7 +40,7 @@ export const Default: Story = {
     <wc-button
       variant="${args.variant}"
       size="${args.size}"
-      style="${args.style}"
+      design-style="${args.designStyle}"
       ?disabled="${args.disabled}"
       ?loading="${args.loading}"
     >
@@ -49,31 +49,27 @@ export const Default: Story = {
   `,
 };
 
-// Story para mostrar todos los estilos
+// Variante 2: Todos los estilos visuales
 export const AllStyles: Story = {
+  name: "All Design Styles",
   render: () => html`
     <div class="space-y-6 p-6">
-      <h2 class="text-2xl font-bold mb-4">All Button Styles</h2>
+      <h2 class="text-2xl font-bold mb-4">All Design Styles</h2>
 
       ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
         (style) => html`
           <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-3 capitalize">
-              ${style} Style
-            </h3>
+            <h3 class="text-lg font-semibold mb-3 capitalize">${style}</h3>
             <div class="flex gap-2 flex-wrap">
-              <wc-button style="${style}" variant="primary">Primary</wc-button>
-              <wc-button style="${style}" variant="secondary"
-                >Secondary</wc-button
-              >
-              <wc-button style="${style}" variant="outline">Outline</wc-button>
-              <wc-button style="${style}" variant="ghost">Ghost</wc-button>
-              <wc-button style="${style}" variant="primary" disabled
-                >Disabled</wc-button
-              >
-              <wc-button style="${style}" variant="primary" loading
-                >Loading</wc-button
-              >
+              <wc-button design-style="${style}" variant="primary">
+                Primary ${style}
+              </wc-button>
+              <wc-button design-style="${style}" variant="secondary">
+                Secondary
+              </wc-button>
+              <wc-button design-style="${style}" variant="outline">
+                Outline
+              </wc-button>
             </div>
           </div>
         `
@@ -82,22 +78,20 @@ export const AllStyles: Story = {
   `,
 };
 
-// Story para mostrar todos los tamaños
+// Variante 3: Todos los tamaños
 export const AllSizes: Story = {
+  name: "All Sizes",
   render: () => html`
     <div class="space-y-4 p-6">
-      <h2 class="text-2xl font-bold mb-4">All Button Sizes</h2>
+      <h2 class="text-2xl font-bold mb-4">Button Sizes</h2>
 
       ${["sm", "md", "lg", "xl"].map(
         (size) => html`
           <div class="flex items-center gap-4">
             <span class="w-20 text-sm font-medium capitalize">${size}:</span>
-            <wc-button style="flat" variant="primary" size="${size}">
+            <wc-button design-style="flat" variant="primary" size="${size}">
               ${size.toUpperCase()} Button
             </wc-button>
-            <wc-button style="flat" variant="outline" size="${size}">
-              Outline
-            </wc-button>
           </div>
         `
       )}
@@ -105,118 +99,72 @@ export const AllSizes: Story = {
   `,
 };
 
-// Story para mostrar todos los variants
-export const AllVariants: Story = {
-  render: () => html`
-    <div class="space-y-6 p-6">
-      <h2 class="text-2xl font-bold mb-4">All Button Variants</h2>
-
-      ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
-        (style) => html`
-          <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-3 capitalize">
-              ${style} Style
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <wc-button style="${style}" variant="primary" class="w-full"
-                  >Primary</wc-button
-                >
-              </div>
-              <div>
-                <wc-button style="${style}" variant="secondary" class="w-full"
-                  >Secondary</wc-button
-                >
-              </div>
-              <div>
-                <wc-button style="${style}" variant="outline" class="w-full"
-                  >Outline</wc-button
-                >
-              </div>
-              <div>
-                <wc-button style="${style}" variant="ghost" class="w-full"
-                  >Ghost</wc-button
-                >
-              </div>
-            </div>
-          </div>
-        `
-      )}
-    </div>
-  `,
-};
-
-// Story para estados
+// Variante 4: Estados del botón
 export const States: Story = {
+  name: "Button States",
   render: () => html`
     <div class="space-y-6 p-6">
       <h2 class="text-2xl font-bold mb-4">Button States</h2>
 
-      ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
-        (style) => html`
-          <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-3 capitalize">
-              ${style} Style
-            </h3>
-            <div class="flex gap-2 flex-wrap">
-              <wc-button style="${style}" variant="primary">Normal</wc-button>
-              <wc-button style="${style}" variant="primary" disabled
-                >Disabled</wc-button
-              >
-              <wc-button style="${style}" variant="primary" loading
-                >Loading</wc-button
-              >
-              <wc-button style="${style}" variant="primary" disabled loading
-                >Disabled Loading</wc-button
-              >
-            </div>
-          </div>
-        `
-      )}
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-3">Normal vs Disabled</h3>
+        <div class="flex gap-2 flex-wrap">
+          <wc-button design-style="flat" variant="primary">Normal</wc-button>
+          <wc-button design-style="flat" variant="primary" disabled>
+            Disabled
+          </wc-button>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-3">Loading States</h3>
+        <div class="flex gap-2 flex-wrap">
+          <wc-button design-style="flat" variant="primary" loading>
+            Loading
+          </wc-button>
+          <wc-button design-style="flat" variant="primary" disabled loading>
+            Disabled Loading
+          </wc-button>
+        </div>
+      </div>
     </div>
   `,
 };
 
-// Story interactivo para playground
+// Variante 5: Playground interactivo
 export const Playground: Story = {
+  name: "Playground",
   render: (args) => html`
-    <div class="p-6 space-y-6">
-      <div class="max-w-md mx-auto">
-        <h3 class="text-lg font-semibold mb-4">Button Playground</h3>
+    <div class="p-6 max-w-md mx-auto">
+      <div class="mb-6 p-4 border rounded-lg bg-surfaceContainerLow">
+        <wc-button
+          variant="${args.variant}"
+          size="${args.size}"
+          design-style="${args.designStyle}"
+          ?disabled="${args.disabled}"
+          ?loading="${args.loading}"
+          class="w-full justify-center"
+        >
+          ${args.loading
+            ? "Loading..."
+            : `${args.designStyle} ${args.variant} Button`}
+        </wc-button>
+      </div>
 
-        <div class="mb-6 p-4 border rounded-lg bg-surfaceContainerLow">
-          <wc-button
-            variant="${args.variant}"
-            size="${args.size}"
-            style="${args.style}"
-            ?disabled="${args.disabled}"
-            ?loading="${args.loading}"
-            class="w-full justify-center"
-          >
-            ${args.loading
-              ? "Loading..."
-              : `${args.style} ${args.variant} Button`}
-          </wc-button>
-        </div>
-
-        <div class="text-sm space-y-2 text-onSurfaceVariant">
-          <div><strong>Style:</strong> ${args.style}</div>
-          <div><strong>Variant:</strong> ${args.variant}</div>
-          <div><strong>Size:</strong> ${args.size}</div>
-          <div><strong>Disabled:</strong> ${args.disabled}</div>
-          <div><strong>Loading:</strong> ${args.loading}</div>
-        </div>
+      <div class="text-sm space-y-2 text-onSurfaceVariant">
+        <div><strong>Design Style:</strong> ${args.designStyle}</div>
+        <div><strong>Variant:</strong> ${args.variant}</div>
+        <div><strong>Size:</strong> ${args.size}</div>
+        <div><strong>Disabled:</strong> ${args.disabled}</div>
+        <div><strong>Loading:</strong> ${args.loading}</div>
       </div>
     </div>
   `,
   args: {
     variant: "primary",
     size: "md",
-    style: "flat",
+    designStyle: "flat",
     disabled: false,
     loading: false,
-  },
-  parameters: {
-    controls: { expanded: true },
   },
 };

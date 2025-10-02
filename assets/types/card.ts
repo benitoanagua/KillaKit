@@ -31,5 +31,5 @@ export interface CardProps {
   media_width?: CardMediaWidth;
   aspect_ratio?: CardAspectRatio;
   auto_layout?: boolean;
-  style?: CardStyle;
+  designStyle?: CardStyle;
 }

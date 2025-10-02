@@ -1,7 +1,7 @@
 import { LitElement, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import mainCSS from "../main.css?inline";
-import type { ButtonVariant, ButtonSize } from "../types/button";
+import type { ButtonVariant, ButtonSize, ButtonStyle } from "../types/button";
 import { ThemeAwareMixin } from "../mixins/ThemeAwareMixin.js";
 
 const ThemeAwareBase = ThemeAwareMixin(LitElement);
@@ -12,12 +12,8 @@ export class WcButton extends ThemeAwareBase {
 
   @property({ type: String }) variant: ButtonVariant = "primary";
   @property({ type: String }) size: ButtonSize = "md";
-  @property({ type: String }) style:
-    | "flat"
-    | "elegant"
-    | "neumorphism"
-    | "playful"
-    | "brutalist" = "flat";
+  @property({ type: String, attribute: "design-style" })
+  designStyle: ButtonStyle = "flat";
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean }) loading = false;
   @property({ type: String }) type: "button" | "submit" | "reset" = "button";
@@ -33,8 +29,8 @@ export class WcButton extends ThemeAwareBase {
   updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
 
-    if (changedProperties.has("style")) {
-      this.currentStyle = this.style;
+    if (changedProperties.has("designStyle")) {
+      this.currentStyle = this.designStyle;
       this.updateThemeVars();
       this.applyThemeClass();
     }
@@ -45,7 +41,7 @@ export class WcButton extends ThemeAwareBase {
       "wc-button",
       `wc-button-${this.variant}`,
       `wc-button-${this.size}`,
-      `wc-button-style-${this.style}`,
+      `wc-button-style-${this.designStyle}`,
     ];
 
     if (this.loading) baseClasses.push("wc-button-loading");
@@ -88,7 +84,7 @@ export class WcButton extends ThemeAwareBase {
         detail: {
           variant: this.variant,
           size: this.size,
-          style: this.style,
+          designStyle: this.designStyle,
           nativeEvent: e,
         },
         bubbles: true,

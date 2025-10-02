@@ -17,7 +17,7 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
       return {
         currentTheme: { type: String },
         currentStyle: { type: String },
-        style: { type: String },
+        designStyle: { type: String },
       };
     }
 
@@ -37,10 +37,10 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
       super.updated?.(changedProperties);
 
       if (
-        changedProperties.has("style") ||
+        changedProperties.has("designStyle") ||
         changedProperties.has("currentTheme")
       ) {
-        this.currentStyle = (this as any).style || "flat";
+        this.currentStyle = (this as any).designStyle || "flat";
         this.updateThemeVars();
       }
     }
@@ -100,10 +100,9 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
         document.documentElement.getAttribute("data-theme") || "light";
       this.currentTheme = theme;
 
-      const componentStyle = (this as any).style || "flat";
+      const componentStyle = (this as any).designStyle || "flat";
       this.currentStyle = componentStyle;
 
-      // Reutilizar o crear elemento temporal
       if (!this.tempElement) {
         this.tempElement = document.createElement("div");
         this.tempElement.style.cssText =
@@ -111,7 +110,6 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
         document.body.appendChild(this.tempElement);
       }
 
-      // Aplicar clase del tema
       this.tempElement.className = `${componentStyle}-theme`;
       if (theme === "dark") {
         this.tempElement.setAttribute("data-mode", "dark");
@@ -119,7 +117,6 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
         this.tempElement.removeAttribute("data-mode");
       }
 
-      // Extraer variables CSS
       const computedStyle = getComputedStyle(this.tempElement);
 
       const cssVars = THEME_CSS_VARS.map((varName: ThemeCssVar) => {
@@ -145,7 +142,6 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
       setTimeout(() => this.updateThemeVars(), 0);
     }
 
-    // Método opcional para aplicar clase al host (útil para CSS global)
     protected applyThemeClass() {
       if (this.shadowRoot?.host) {
         const themeClasses = [

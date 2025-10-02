@@ -17,7 +17,7 @@ export type ButtonStyle =
 export interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  style?: ButtonStyle;
+  designStyle?: ButtonStyle;
   disabled?: boolean;
   loading?: boolean;
   type?: "button" | "submit" | "reset";
