@@ -1,12 +1,40 @@
-/* Card Component - Flat Design */
+/* Card Component - Multi-style System */
 .wc-card {
-  @apply block transition-all duration-300 bg-surface border border-outlineVariant;
+  @apply block transition-all duration-300;
 }
 
-.wc-card--flat {
-  @apply shadow-none rounded-none border-b-4 border-b-primary;
+/* Base card styles for each design system */
+.wc-card-style-flat {
+  @apply bg-surface border border-outlineVariant shadow-none rounded-none border-b-4 border-b-primary;
 }
 
+.wc-card-style-elegant {
+  @apply bg-surface border border-outlineVariant rounded-sm shadow-sm transition-all duration-400 ease-in-out;
+}
+
+.wc-card-style-neumorphism {
+  @apply rounded-xl border-none transition-all duration-300 ease-out;
+  background: var(--color-surfaceContainer);
+  box-shadow:
+    8px 8px 16px var(--color-shadow),
+    -8px -8px 16px var(--color-surfaceBright);
+}
+
+.wc-card-style-playful {
+  @apply rounded-2xl transition-all duration-500;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  background: var(--color-surface);
+  box-shadow: 0 4px 8px
+    color-mix(in oklch, var(--color-primary), transparent 70%);
+}
+
+.wc-card-style-brutalist {
+  @apply rounded-none border-2 transition-none bg-surface;
+  border-color: var(--color-onSurface);
+  box-shadow: 4px 4px 0 var(--color-onSurface);
+}
+
+/* Container and layout */
 .wc-card__container {
   @apply flex gap-4 w-full;
 }
@@ -19,30 +47,72 @@
   @apply flex flex-col gap-y-3 flex-1 min-w-0 p-4;
 }
 
+/* Author section */
 .wc-card__author {
   @apply flex items-center gap-x-2;
 }
 
 .wc-card__author-image {
-  @apply w-8 h-8 rounded-none object-cover;
+  @apply w-8 h-8 object-cover;
+}
+
+.wc-card-style-flat .wc-card__author-image,
+.wc-card-style-brutalist .wc-card__author-image {
+  @apply rounded-none;
+}
+
+.wc-card-style-elegant .wc-card__author-image {
+  @apply rounded-sm;
+}
+
+.wc-card-style-neumorphism .wc-card__author-image {
+  @apply rounded-xl;
+}
+
+.wc-card-style-playful .wc-card__author-image {
+  @apply rounded-2xl;
 }
 
 .wc-card__author-bullet {
-  @apply bg-primary w-2 h-2 rounded-none inline-block;
+  @apply bg-primary w-2 h-2 inline-block;
+}
+
+.wc-card-style-flat .wc-card__author-bullet,
+.wc-card-style-brutalist .wc-card__author-bullet {
+  @apply rounded-none;
+}
+
+.wc-card-style-elegant .wc-card__author-bullet {
+  @apply rounded-sm;
+}
+
+.wc-card-style-neumorphism .wc-card__author-bullet {
+  @apply rounded-xl;
+}
+
+.wc-card-style-playful .wc-card__author-bullet {
+  @apply rounded-2xl;
 }
 
 .wc-card__author-link {
   @apply text-onSurfaceVariant text-sm font-medium no-underline hover:text-primary transition-colors;
 }
 
+/* Title and links */
 .wc-card__title-link {
   @apply text-onSurface no-underline block;
 }
 
+.wc-card__image-link {
+  @apply block no-underline;
+}
+
+/* Content */
 .wc-card__excerpt {
   @apply text-onSurfaceVariant my-2 text-base leading-relaxed;
 }
 
+/* Meta information */
 .wc-card__meta {
   @apply text-onSurfaceVariant flex flex-wrap items-center gap-x-1 gap-y-4 text-sm;
 }
@@ -55,10 +125,58 @@
   @apply content-['•'] ml-2 mr-1;
 }
 
+/* Tag styles */
 .wc-card__tag {
-  @apply bg-primaryContainer text-onPrimaryContainer py-1 px-3 rounded-none text-xs no-underline font-medium transition-colors border border-primary;
+  @apply py-1 px-3 text-xs no-underline font-medium transition-colors;
+}
+
+.wc-card-style-flat .wc-card__tag {
+  @apply bg-primaryContainer text-onPrimaryContainer rounded-none border border-primary;
+}
+
+.wc-card-style-elegant .wc-card__tag {
+  @apply bg-primaryContainer text-onPrimaryContainer rounded-sm;
+}
+
+.wc-card-style-neumorphism .wc-card__tag {
+  @apply bg-surfaceContainer text-onSurface rounded-xl;
+}
+
+.wc-card-style-playful .wc-card__tag {
+  @apply bg-primaryContainer text-onPrimaryContainer rounded-2xl;
+}
+
+.wc-card-style-brutalist .wc-card__tag {
+  @apply bg-surface text-onSurface rounded-none border border-onSurface;
 }
 
 .wc-card__tag:hover {
   @apply bg-primary text-onPrimary;
+}
+
+/* Interactive states */
+.wc-card-style-elegant:hover {
+  @apply shadow-md transform -translate-y-0.5;
+}
+
+.wc-card-style-neumorphism:hover {
+  box-shadow:
+    4px 4px 8px var(--color-shadow),
+    -4px -4px 8px var(--color-surfaceBright);
+  transform: scale(1.02);
+}
+
+.wc-card-style-playful:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+.wc-card-style-brutalist:hover {
+  box-shadow: 2px 2px 0 var(--color-onSurface);
+  transform: translate(2px, 2px);
+}
+
+/* Focus states for accessibility */
+.wc-card:focus-within {
+  @apply outline-none ring-2 ring-offset-2;
+  ring-color: var(--color-primary);
 }

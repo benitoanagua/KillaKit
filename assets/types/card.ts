@@ -7,6 +7,12 @@ export type CardMediaWidth =
   | "is-one-quarter"
   | "is-one-fifth";
 export type CardAspectRatio = "monitor" | "square" | "video";
+export type CardStyle =
+  | "flat"
+  | "elegant"
+  | "neumorphism"
+  | "playful"
+  | "brutalist";
 
 export interface CardProps {
   title?: string;
@@ -25,4 +31,5 @@ export interface CardProps {
   media_width?: CardMediaWidth;
   aspect_ratio?: CardAspectRatio;
   auto_layout?: boolean;
+  style?: CardStyle;
 }

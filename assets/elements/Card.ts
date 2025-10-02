@@ -9,8 +9,10 @@ import type {
 } from "../types/card.js";
 import { TitleRendererMixin } from "../mixins/TitleRenderer.js";
 import { PaddingMixin } from "../mixins/PaddingMixin.js";
+import { ThemeAwareMixin } from "../mixins/ThemeAwareMixin.js";
 
-const BaseClass = PaddingMixin(TitleRendererMixin(LitElement));
+const ThemeAwareBase = ThemeAwareMixin(LitElement);
+const BaseClass = PaddingMixin(TitleRendererMixin(ThemeAwareBase));
 
 @customElement("wc-card")
 export class WcCard extends BaseClass {
@@ -36,14 +38,40 @@ export class WcCard extends BaseClass {
   @property({ type: String, attribute: "reading-time" }) reading_time = "";
   @property({ type: String, attribute: "published-at" }) published_at = "";
   @property({ type: Boolean, attribute: "auto-layout" }) auto_layout = false;
+  @property({ type: String }) style:
+    | "flat"
+    | "elegant"
+    | "neumorphism"
+    | "playful"
+    | "brutalist" = "flat";
 
   protected createRenderRoot() {
-    return this;
+    const shadowRoot = super.createRenderRoot();
+    const themeStyle = document.createElement("style");
+    themeStyle.id = "theme-vars";
+    shadowRoot.appendChild(themeStyle);
+    return shadowRoot;
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has("style")) {
+      this.currentStyle = this.style;
+      this.updateThemeVars();
+      this.applyThemeClass();
+    }
   }
 
   private getCardClasses() {
     const paddingClass = this.getPaddingClass();
-    return ["wc-card", "wc-card--flat", paddingClass].join(" ");
+    const baseClasses = [
+      "wc-card",
+      `wc-card-style-${this.style}`,
+      paddingClass,
+    ];
+
+    return baseClasses.join(" ");
   }
 
   private shouldShowAuthor(): boolean {
@@ -118,8 +146,15 @@ export class WcCard extends BaseClass {
   }
 
   private getImageClasses() {
-    // Flat design: sin bordes redondeados
-    const sizeClass = "rounded-none";
+    const baseClasses = "w-full object-cover";
+
+    const styleClasses = {
+      flat: "rounded-none",
+      elegant: "rounded-sm",
+      neumorphism: "rounded-xl",
+      playful: "rounded-2xl",
+      brutalist: "rounded-none border-2 border-onSurface",
+    };
 
     const aspectClass =
       this.aspect_ratio === "square"
@@ -128,21 +163,37 @@ export class WcCard extends BaseClass {
           ? "aspect-video"
           : "aspect-4/3";
 
-    return `w-full object-cover ${sizeClass} ${aspectClass}`;
+    return `${baseClasses} ${styleClasses[this.style]} ${aspectClass}`;
+  }
+
+  private _handleCardClick(e: Event) {
+    this.dispatchEvent(
+      new CustomEvent("wc-card-click", {
+        detail: {
+          title: this.title,
+          url: this.url,
+          style: this.style,
+          nativeEvent: e,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   render() {
     return html`
-      <div class="${this.getCardClasses()}">
+      <div class="${this.getCardClasses()}" @click="${this._handleCardClick}">
         <div class="wc-card__container ${this.getFlexClass()}">
           ${this.feature_image
             ? html`
                 <figure class="wc-card__figure ${this.getFigureClass()}">
-                  <a href="${this.url}">
+                  <a href="${this.url}" class="wc-card__image-link">
                     <img
                       src="${this.feature_image}"
                       alt="${this.title}"
                       class="${this.getImageClasses()}"
+                      loading="lazy"
                     />
                   </a>
                 </figure>
@@ -159,6 +210,7 @@ export class WcCard extends BaseClass {
                             src="${this.author_profile_image}"
                             alt="${this.author_name}"
                             class="wc-card__author-image"
+                            loading="lazy"
                           />
                         `
                       : html`<span class="wc-card__author-bullet"></span>`}
