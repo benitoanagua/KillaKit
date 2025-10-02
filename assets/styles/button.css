@@ -1,0 +1,173 @@
+@layer components {
+  /* ============================================
+     BUTTON BASE
+     ============================================ */
+
+  .wc-button {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply whitespace-nowrap select-none outline-none font-medium;
+    @apply border cursor-pointer transition-all;
+    @apply disabled:cursor-not-allowed disabled:opacity-40;
+    @apply min-h-10 px-4 py-2 text-base;
+  }
+
+  .wc-button-loading {
+    @apply pointer-events-none relative;
+  }
+
+  .wc-button-loading .wc-button-content {
+    @apply opacity-0;
+  }
+
+  .wc-button-disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  .wc-button-spinner {
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+    @apply w-4 h-4 border-2 border-transparent border-t-current rounded-full;
+    @apply animate-spin;
+  }
+
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+
+  /* ============================================
+     TAMAÑOS
+     ============================================ */
+
+  .wc-button-sm {
+    @apply px-3 py-1 text-sm min-h-8;
+  }
+
+  .wc-button-md {
+    @apply px-4 py-2 text-base min-h-10;
+  }
+
+  .wc-button-lg {
+    @apply px-6 py-3 text-lg min-h-12;
+  }
+
+  .wc-button-xl {
+    @apply px-8 py-4 text-xl min-h-14;
+  }
+
+  /* ============================================
+     VARIANTES BASE
+     ============================================ */
+
+  .wc-button-primary {
+    @apply bg-primary text-onPrimary border-transparent;
+  }
+
+  .wc-button-secondary {
+    @apply bg-surface text-onSurface border-outline;
+  }
+
+  .wc-button-outline {
+    @apply bg-transparent text-primary border-outline;
+  }
+
+  .wc-button-ghost {
+    @apply bg-transparent text-onSurface border-transparent;
+  }
+
+  /* ============================================
+     ESTILOS DE DISEÑO
+     ============================================ */
+
+  /* FLAT STYLE (default) */
+  .wc-button-style-flat {
+    @apply rounded-sm transition-colors duration-200;
+  }
+
+  .wc-button-style-flat.wc-button-primary {
+    @apply hover:bg-primaryContainer hover:text-onPrimaryContainer;
+  }
+
+  .wc-button-style-flat.wc-button-secondary {
+    @apply hover:bg-surfaceContainerLow;
+  }
+
+  .wc-button-style-flat.wc-button-outline {
+    @apply hover:bg-primary hover:text-onPrimary hover:border-primary;
+  }
+
+  .wc-button-style-flat.wc-button-ghost {
+    @apply hover:bg-surfaceContainerLow;
+  }
+
+  /* ELEGANT STYLE */
+  .wc-button-style-elegant {
+    @apply rounded-sm transition-all duration-400 ease-in-out font-serif font-light tracking-wide;
+  }
+
+  .wc-button-style-elegant.wc-button-primary {
+    @apply bg-inverseSurface text-inverseOnSurface border-outline shadow-[0_2px_4px_var(--color-shadow)] hover:bg-primary hover:text-onPrimary hover:shadow-[0_4px_8px_var(--color-shadow)] hover:-translate-y-px;
+  }
+
+  .wc-button-style-elegant.wc-button-outline {
+    @apply hover:bg-surfaceContainerHigh hover:text-onSurface hover:-translate-y-px;
+  }
+
+  .wc-button-style-elegant.wc-button-ghost {
+    @apply hover:bg-surfaceContainerLow;
+  }
+
+  /* NEUMORPHISM STYLE */
+  .wc-button-style-neumorphism {
+    @apply rounded-xl border-none transition-all duration-300 ease-out;
+  }
+
+  .wc-button-style-neumorphism.wc-button-primary {
+    @apply bg-surfaceContainer text-onSurface shadow-[8px_8px_16px_var(--color-shadow),-8px_-8px_16px_var(--color-surfaceBright)] hover:shadow-[4px_4px_8px_var(--color-shadow),-4px_-4px_8px_var(--color-surfaceBright)] hover:scale-105 active:shadow-[inset_4px_4px_8px_var(--color-shadow),inset_-4px_-4px_8px_var(--color-surfaceBright)] active:scale-100;
+  }
+
+  .wc-button-style-neumorphism.wc-button-secondary {
+    @apply bg-surfaceVariant text-onSurfaceVariant shadow-[8px_8px_16px_var(--color-shadow),-8px_-8px_16px_var(--color-surfaceBright)] hover:shadow-[4px_4px_8px_var(--color-shadow),-4px_-4px_8px_var(--color-surfaceBright)] hover:scale-105;
+  }
+
+  /* PLAYFUL STYLE */
+  .wc-button-style-playful {
+    @apply rounded-2xl transition-all duration-500;
+    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .wc-button-style-playful.wc-button-primary {
+    @apply shadow-[0_4px_8px_color-mix(in_oklch,var(--color-primary),transparent_70%)] hover:bg-tertiary hover:text-onTertiary hover:scale-105 hover:rotate-2;
+  }
+
+  .wc-button-style-playful.wc-button-secondary {
+    @apply shadow-[0_4px_8px_color-mix(in_oklch,var(--color-secondary),transparent_70%)] hover:bg-primary hover:text-onPrimary hover:scale-105 hover:-rotate-2;
+  }
+
+  .wc-button-style-playful.wc-button-outline {
+    @apply hover:bg-primary hover:text-onPrimary hover:scale-105 hover:rotate-1;
+  }
+
+  /* BRUTALIST STYLE */
+  .wc-button-style-brutalist {
+    @apply rounded-none border-2 border-onSurface transition-none font-black;
+  }
+
+  .wc-button-style-brutalist.wc-button-primary {
+    @apply shadow-[4px_4px_0_var(--color-onSurface)] hover:bg-secondary hover:text-onSecondary hover:shadow-[2px_2px_0_var(--color-onSurface)] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none;
+  }
+
+  .wc-button-style-brutalist.wc-button-secondary {
+    @apply bg-tertiary text-onTertiary shadow-[4px_4px_0_var(--color-onSurface)] hover:bg-primary hover:text-onPrimary hover:shadow-[2px_2px_0_var(--color-onSurface)] hover:translate-x-0.5 hover:translate-y-0.5;
+  }
+
+  /* ============================================
+     FOCUS STATES
+     ============================================ */
+
+  .wc-button:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+
+  .wc-button-style-elegant:focus-visible {
+    @apply ring-1 ring-primary ring-offset-1;
+  }
+}
