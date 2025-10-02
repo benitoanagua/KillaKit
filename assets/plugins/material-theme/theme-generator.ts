@@ -1,47 +1,14 @@
 import { writeFileSync, mkdirSync } from "fs";
-import { dirname, resolve } from "path";
+import { resolve } from "path";
 import {
   argbFromHex,
   hexFromArgb,
   MaterialDynamicColors,
   Hct,
-  SchemeTonalSpot,
-  SchemeNeutral,
-  SchemeVibrant,
-  SchemeExpressive,
-  SchemeMonochrome,
-  SchemeContent,
-  SchemeFidelity,
 } from "@material/material-color-utilities";
-import { themeConfig, getVariantName } from "./theme-config";
 import { THEME_CSS_VARS } from "../../types/material";
-
-export function getThemeConfig() {
-  return themeConfig;
-}
-
-// Mapeo de nombres de variante a constructores de esquema
-const SCHEME_CONSTRUCTORS: Record<string, any> = {
-  MONOCHROME: SchemeMonochrome,
-  NEUTRAL: SchemeNeutral,
-  TONAL_SPOT: SchemeTonalSpot,
-  VIBRANT: SchemeVibrant,
-  EXPRESSIVE: SchemeExpressive,
-  FIDELITY: SchemeFidelity,
-  CONTENT: SchemeContent,
-};
-
-function createScheme(isDark: boolean) {
-  const config = getThemeConfig();
-  const sourceColor = argbFromHex(config.seedColor);
-  const sourceHct = Hct.fromInt(sourceColor);
-
-  // Convertir número de variante a nombre
-  const variantName = getVariantName(config.variant);
-  const SchemeConstructor = SCHEME_CONSTRUCTORS[variantName] || SchemeTonalSpot;
-
-  return new SchemeConstructor(sourceHct, isDark, config.contrastLevel);
-}
+import { SEED_COLOR, STYLE_CONFIGS } from "./theme-config";
+import type { StyleConfig } from "./types";
 
 function extractColors(scheme: any) {
   const colors: Record<string, string> = {};
@@ -50,48 +17,75 @@ function extractColors(scheme: any) {
       const color = (MaterialDynamicColors as any)[prop]?.getArgb(scheme);
       colors[prop] = hexFromArgb(color);
     } catch {
-      colors[prop] = "#FF00FF"; // fallback
+      colors[prop] = "#FF00FF";
       console.warn(`Could not extract color property: ${prop}`);
     }
   }
   return colors;
 }
 
-export function generateThemeFiles(root: string, outputDir: string): void {
-  try {
-    const config = getThemeConfig();
-    const variantName = getVariantName(config.variant);
+function generateThemeFile(styleConfig: StyleConfig, outputDir: string) {
+  const { name, variant: SchemeConstructor } = styleConfig;
 
-    console.log(`🎨 Generating Material Design theme:`);
-    console.log(`   • Seed Color: ${config.seedColor}`);
-    console.log(`   • Variant: ${variantName} (${config.variant})`);
-    console.log(`   • Contrast Level: ${config.contrastLevel}`);
+  console.log(`   • ${name.toUpperCase()}`);
 
-    const lightScheme = createScheme(false);
-    const darkScheme = createScheme(true);
+  const lightScheme = new SchemeConstructor(
+    Hct.fromInt(argbFromHex(SEED_COLOR)),
+    false,
+    0
+  );
+  const darkScheme = new SchemeConstructor(
+    Hct.fromInt(argbFromHex(SEED_COLOR)),
+    true,
+    0
+  );
 
-    const lightColors = extractColors(lightScheme);
-    const darkColors = extractColors(darkScheme);
+  const lightColors = extractColors(lightScheme);
+  const darkColors = extractColors(darkScheme);
 
-    const cssContent = `@theme {
+  const cssContent = `@theme {
 ${THEME_CSS_VARS.map((k) => `  --color-${k}: ${lightColors[k]};`).join("\n")}
 }
 
 [data-theme="dark"] {
 ${THEME_CSS_VARS.map((k) => `  --color-${k}: ${darkColors[k]};`).join("\n")}
-}`;
+}
 
-    // Crear directorio si no existe
-    const fullPath = resolve(root, outputDir);
-    mkdirSync(dirname(fullPath), { recursive: true });
+.${name}-theme {
+${THEME_CSS_VARS.map((k) => `  --color-${k}: ${lightColors[k]};`).join("\n")}
+}
 
-    // Escribir archivo CSS
-    writeFileSync(resolve(fullPath, "material-theme.css"), cssContent);
+.${name}-theme[data-mode="dark"] {
+${THEME_CSS_VARS.map((k) => `  --color-${k}: ${darkColors[k]};`).join("\n")}
+}
+`;
 
-    console.log(
-      "✅ Theme generated successfully at:",
-      `${outputDir}/material-theme.css`
+  const styleDir = resolve(outputDir, name);
+  mkdirSync(styleDir, { recursive: true });
+
+  writeFileSync(resolve(styleDir, "material-theme.css"), cssContent);
+
+  return { name, path: `${name}/material-theme.css` };
+}
+
+export function generateThemeFiles(root: string, outputDir: string): void {
+  try {
+    console.log("🎨 Generating 5 Material Design Theme Variants...");
+    console.log(`   🎨 Seed color: ${SEED_COLOR}\n`);
+
+    const generatedThemes = STYLE_CONFIGS.map((config) =>
+      generateThemeFile(config, resolve(root, outputDir))
     );
+
+    console.log("\n✅ 5 theme variants generated successfully:");
+    generatedThemes.forEach((theme) => {
+      console.log(`   📁 ${theme.path}`);
+    });
+
+    console.log("\n🎨 Usage:");
+    console.log(`   • Import: @import "./styles/flat/material-theme.css";`);
+    console.log(`   • Use class: <div class="flat-theme">...</div>`);
+    console.log(`   • Use data attribute: <div data-theme="flat">...</div>`);
   } catch (error) {
     console.error("❌ Error generating themes:", error);
     throw error;

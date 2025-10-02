@@ -1,42 +1,38 @@
-/**
- * Material Design theme configuration
- * Change values here to automatically regenerate all themes
- *
- * Variants (use the numeric value):
- * 0: MONOCHROME
- * 1: NEUTRAL
- * 2: TONAL_SPOT (default)
- * 3: VIBRANT
- * 4: EXPRESSIVE
- * 5: FIDELITY
- * 6: CONTENT
- */
+import {
+  SchemeTonalSpot,
+  SchemeNeutral,
+  SchemeVibrant,
+  // SchemeExpressive,
+  // SchemeMonochrome,
+  // SchemeContent,
+  // SchemeFidelity,
+  SchemeFruitSalad,
+  SchemeRainbow,
+} from "@material/material-color-utilities";
 
-export interface ThemeConfig {
-  seedColor: string;
-  contrastLevel: number;
-  variant: number;
-}
+import type { SchemeConstructor, StyleConfig } from "./types";
 
-export const themeConfig: ThemeConfig = {
-  seedColor: "#660044",
-  contrastLevel: 0,
-  variant: 3,
-};
+export const SEED_COLOR = "#b5007c";
 
-export const seedColor = themeConfig.seedColor;
-export const contrastLevel = themeConfig.contrastLevel;
-export const variant = themeConfig.variant;
-
-export function getVariantName(variantNumber: number): string {
-  const variantNames: Record<number, string> = {
-    0: "MONOCHROME",
-    1: "NEUTRAL",
-    2: "TONAL_SPOT",
-    3: "VIBRANT",
-    4: "EXPRESSIVE",
-    5: "FIDELITY",
-    6: "CONTENT",
-  };
-  return variantNames[variantNumber] || "TONAL_SPOT";
-}
+export const STYLE_CONFIGS: StyleConfig[] = [
+  {
+    name: "flat",
+    variant: SchemeNeutral as SchemeConstructor,
+  },
+  {
+    name: "elegant",
+    variant: SchemeTonalSpot as SchemeConstructor,
+  },
+  {
+    name: "neumorphism",
+    variant: SchemeVibrant as SchemeConstructor,
+  },
+  {
+    name: "playful",
+    variant: SchemeRainbow as SchemeConstructor,
+  },
+  {
+    name: "brutalist",
+    variant: SchemeFruitSalad as SchemeConstructor,
+  },
+];

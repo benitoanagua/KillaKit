@@ -30,6 +30,16 @@ export class WcButton extends ThemeAwareBase {
     return shadowRoot;
   }
 
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has("style")) {
+      this.currentStyle = this.style;
+      this.updateThemeVars();
+      this.applyThemeClass();
+    }
+  }
+
   private getButtonClasses() {
     const baseClasses = [
       "wc-button",

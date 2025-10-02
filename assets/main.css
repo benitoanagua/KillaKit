@@ -1,7 +1,13 @@
 @import "tailwindcss";
 @plugin "@iconify/tailwind4";
 
-@import "./styles/material-theme.css";
+/* Importar todos los temas */
+@import "./styles/flat/material-theme.css";
+@import "./styles/elegant/material-theme.css";
+@import "./styles/neumorphism/material-theme.css";
+@import "./styles/playful/material-theme.css";
+@import "./styles/brutalist/material-theme.css";
+
 @import "./styles/theme.css";
 
 @import "./styles/card.css";

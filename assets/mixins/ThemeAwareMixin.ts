@@ -2,16 +2,22 @@ import { LitElement, PropertyValues } from "lit";
 import { THEME_CSS_VARS, type ThemeCssVar } from "../types/material.js";
 import { type ThemeChangeEvent } from "../types/events.js";
 
+type ThemeStyle = "flat" | "elegant" | "neumorphism" | "playful" | "brutalist";
+
 export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
   Base: T
 ) {
   return class ThemeAware extends Base {
     protected currentTheme = "light";
+    protected currentStyle: ThemeStyle = "flat";
     private themeObserver?: MutationObserver;
+    private tempElement: HTMLDivElement | null = null;
 
     static get properties() {
       return {
         currentTheme: { type: String },
+        currentStyle: { type: String },
+        style: { type: String },
       };
     }
 
@@ -24,12 +30,17 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
     disconnectedCallback() {
       super.disconnectedCallback?.();
       this.cleanupThemeListener();
+      this.cleanupTempElement();
     }
 
     updated(changedProperties: PropertyValues) {
       super.updated?.(changedProperties);
 
-      if (changedProperties.has("currentTheme")) {
+      if (
+        changedProperties.has("style") ||
+        changedProperties.has("currentTheme")
+      ) {
+        this.currentStyle = (this as any).style || "flat";
         this.updateThemeVars();
       }
     }
@@ -65,6 +76,13 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
       this.themeObserver?.disconnect();
     }
 
+    private cleanupTempElement() {
+      if (this.tempElement && this.tempElement.parentNode) {
+        this.tempElement.parentNode.removeChild(this.tempElement);
+      }
+      this.tempElement = null;
+    }
+
     private handleThemeChange = (event: Event) => {
       const customEvent = event as ThemeChangeEvent;
       this.currentTheme = customEvent.detail?.theme || "light";
@@ -82,7 +100,27 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
         document.documentElement.getAttribute("data-theme") || "light";
       this.currentTheme = theme;
 
-      const computedStyle = getComputedStyle(document.documentElement);
+      const componentStyle = (this as any).style || "flat";
+      this.currentStyle = componentStyle;
+
+      // Reutilizar o crear elemento temporal
+      if (!this.tempElement) {
+        this.tempElement = document.createElement("div");
+        this.tempElement.style.cssText =
+          "position: absolute; visibility: hidden; pointer-events: none;";
+        document.body.appendChild(this.tempElement);
+      }
+
+      // Aplicar clase del tema
+      this.tempElement.className = `${componentStyle}-theme`;
+      if (theme === "dark") {
+        this.tempElement.setAttribute("data-mode", "dark");
+      } else {
+        this.tempElement.removeAttribute("data-mode");
+      }
+
+      // Extraer variables CSS
+      const computedStyle = getComputedStyle(this.tempElement);
 
       const cssVars = THEME_CSS_VARS.map((varName: ThemeCssVar) => {
         const value = computedStyle
@@ -105,6 +143,23 @@ export function ThemeAwareMixin<T extends new (...args: any[]) => LitElement>(
       }
 
       setTimeout(() => this.updateThemeVars(), 0);
+    }
+
+    // Método opcional para aplicar clase al host (útil para CSS global)
+    protected applyThemeClass() {
+      if (this.shadowRoot?.host) {
+        const themeClasses = [
+          "flat-theme",
+          "elegant-theme",
+          "neumorphism-theme",
+          "playful-theme",
+          "brutalist-theme",
+        ];
+        themeClasses.forEach((themeClass) => {
+          this.shadowRoot!.host.classList.remove(themeClass);
+        });
+        this.shadowRoot.host.classList.add(`${this.currentStyle}-theme`);
+      }
     }
   };
 }

@@ -1,3 +1,4 @@
+// Archivo: assets/stories/Button.stories.ts
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit-html";
 
@@ -26,18 +27,41 @@ const meta = {
 export default meta;
 type Story = StoryObj<any>;
 
+// Story básico - Default
+export const Default: Story = {
+  args: {
+    variant: "primary",
+    size: "md",
+    style: "flat",
+    disabled: false,
+    loading: false,
+  },
+  render: (args) => html`
+    <wc-button
+      variant="${args.variant}"
+      size="${args.size}"
+      style="${args.style}"
+      ?disabled="${args.disabled}"
+      ?loading="${args.loading}"
+    >
+      ${args.loading ? "Loading..." : "Click me"}
+    </wc-button>
+  `,
+};
+
+// Story para mostrar todos los estilos
 export const AllStyles: Story = {
   render: () => html`
-    <div class="p-6 space-y-8">
-      <h2 class="text-2xl font-bold mb-6">All Button Styles</h2>
+    <div class="space-y-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">All Button Styles</h2>
 
       ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
         (style) => html`
-          <div class="mb-8 p-6 bg-surfaceContainerHigh rounded-lg border">
-            <h3 class="text-lg font-semibold mb-4 capitalize">
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3 capitalize">
               ${style} Style
             </h3>
-            <div class="flex gap-3 flex-wrap items-center">
+            <div class="flex gap-2 flex-wrap">
               <wc-button style="${style}" variant="primary">Primary</wc-button>
               <wc-button style="${style}" variant="secondary"
                 >Secondary</wc-button
@@ -58,63 +82,129 @@ export const AllStyles: Story = {
   `,
 };
 
-export const StyleComparison: Story = {
+// Story para mostrar todos los tamaños
+export const AllSizes: Story = {
   render: () => html`
-    <div class="p-6">
-      <h2 class="text-2xl font-bold mb-6">Style Comparison</h2>
+    <div class="space-y-4 p-6">
+      <h2 class="text-2xl font-bold mb-4">All Button Sizes</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
-          (style) => html`
-            <div
-              class="p-4 bg-surfaceContainerHigh rounded-lg border text-center"
-            >
-              <h4 class="font-semibold mb-3 capitalize">${style}</h4>
-              <wc-button style="${style}" variant="primary" class="w-full mb-2"
-                >Button</wc-button
-              >
-              <wc-button
-                style="${style}"
-                variant="primary"
-                disabled
-                class="w-full"
-                >Disabled</wc-button
-              >
-            </div>
-          `
-        )}
-      </div>
+      ${["sm", "md", "lg", "xl"].map(
+        (size) => html`
+          <div class="flex items-center gap-4">
+            <span class="w-20 text-sm font-medium capitalize">${size}:</span>
+            <wc-button style="flat" variant="primary" size="${size}">
+              ${size.toUpperCase()} Button
+            </wc-button>
+            <wc-button style="flat" variant="outline" size="${size}">
+              Outline
+            </wc-button>
+          </div>
+        `
+      )}
     </div>
   `,
 };
 
+// Story para mostrar todos los variants
+export const AllVariants: Story = {
+  render: () => html`
+    <div class="space-y-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">All Button Variants</h2>
+
+      ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
+        (style) => html`
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3 capitalize">
+              ${style} Style
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <wc-button style="${style}" variant="primary" class="w-full"
+                  >Primary</wc-button
+                >
+              </div>
+              <div>
+                <wc-button style="${style}" variant="secondary" class="w-full"
+                  >Secondary</wc-button
+                >
+              </div>
+              <div>
+                <wc-button style="${style}" variant="outline" class="w-full"
+                  >Outline</wc-button
+                >
+              </div>
+              <div>
+                <wc-button style="${style}" variant="ghost" class="w-full"
+                  >Ghost</wc-button
+                >
+              </div>
+            </div>
+          </div>
+        `
+      )}
+    </div>
+  `,
+};
+
+// Story para estados
+export const States: Story = {
+  render: () => html`
+    <div class="space-y-6 p-6">
+      <h2 class="text-2xl font-bold mb-4">Button States</h2>
+
+      ${["flat", "elegant", "neumorphism", "playful", "brutalist"].map(
+        (style) => html`
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3 capitalize">
+              ${style} Style
+            </h3>
+            <div class="flex gap-2 flex-wrap">
+              <wc-button style="${style}" variant="primary">Normal</wc-button>
+              <wc-button style="${style}" variant="primary" disabled
+                >Disabled</wc-button
+              >
+              <wc-button style="${style}" variant="primary" loading
+                >Loading</wc-button
+              >
+              <wc-button style="${style}" variant="primary" disabled loading
+                >Disabled Loading</wc-button
+              >
+            </div>
+          </div>
+        `
+      )}
+    </div>
+  `,
+};
+
+// Story interactivo para playground
 export const Playground: Story = {
   render: (args) => html`
-    <div class="p-6">
-      <div class="max-w-md mx-auto space-y-6">
-        <div class="text-center">
-          <h3 class="text-lg font-semibold mb-2">Button Playground</h3>
-          <p class="text-sm text-onSurfaceVariant">
-            Adjust the controls to see changes
-          </p>
+    <div class="p-6 space-y-6">
+      <div class="max-w-md mx-auto">
+        <h3 class="text-lg font-semibold mb-4">Button Playground</h3>
+
+        <div class="mb-6 p-4 border rounded-lg bg-surfaceContainerLow">
+          <wc-button
+            variant="${args.variant}"
+            size="${args.size}"
+            style="${args.style}"
+            ?disabled="${args.disabled}"
+            ?loading="${args.loading}"
+            class="w-full justify-center"
+          >
+            ${args.loading
+              ? "Loading..."
+              : `${args.style} ${args.variant} Button`}
+          </wc-button>
         </div>
 
-        <wc-button
-          style="${args.style}"
-          variant="${args.variant}"
-          size="${args.size}"
-          ?disabled="${args.disabled}"
-          ?loading="${args.loading}"
-        >
-          ${args.loading ? "Loading..." : `${args.style} ${args.variant}`}
-        </wc-button>
-
-        <div class="text-sm text-onSurfaceVariant space-y-1">
-          <div>Style: ${args.style}</div>
-          <div>Variant: ${args.variant}</div>
-          <div>Size: ${args.size}</div>
-          <div>Disabled: ${args.disabled ? "Yes" : "No"}</div>
-          <div>Loading: ${args.loading ? "Yes" : "No"}</div>
+        <div class="text-sm space-y-2 text-onSurfaceVariant">
+          <div><strong>Style:</strong> ${args.style}</div>
+          <div><strong>Variant:</strong> ${args.variant}</div>
+          <div><strong>Size:</strong> ${args.size}</div>
+          <div><strong>Disabled:</strong> ${args.disabled}</div>
+          <div><strong>Loading:</strong> ${args.loading}</div>
         </div>
       </div>
     </div>
@@ -125,5 +215,8 @@ export const Playground: Story = {
     style: "flat",
     disabled: false,
     loading: false,
+  },
+  parameters: {
+    controls: { expanded: true },
   },
 };
